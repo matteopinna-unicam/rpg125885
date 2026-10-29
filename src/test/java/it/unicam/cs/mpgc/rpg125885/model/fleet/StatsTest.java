@@ -30,6 +30,12 @@ class StatsTest {
     }
 
     @Test
+    void timesScalesEveryStat() {
+        assertEquals(new Stats(300, 150, 15, 12, 9, 6, 18), BASE.times(3));
+        assertEquals(Stats.NONE, BASE.times(0));
+    }
+
+    @Test
     void plusIsCommutative() {
         assertEquals(BASE.plus(BONUS), BONUS.plus(BASE));
     }

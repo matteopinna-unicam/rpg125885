@@ -1,14 +1,14 @@
 package it.unicam.cs.mpgc.rpg125885.model.fleet;
 
 /**
- * Contatore con valore compreso tra 0 e un massimo.
+ * Contatore con valore compreso tra 0 e un massimo (modificabile solo con {@link #changeMax(int)}).
  * È l'unico punto in cui questi limiti sono garantiti.
  */
 public final class Gauge {
 
     private static final double PERCENT = 100.0;
 
-    private final int max;
+    private int max;
     private int current;
 
     /** Crea un contatore pieno. */
@@ -62,6 +62,18 @@ public final class Gauge {
         int applied = Math.min(amount, max - current);
         current += applied;
         return applied;
+    }
+
+    /**
+     * Cambia il massimo, ad esempio dopo un livello o una nuova dotazione.
+     * Il valore corrente resta invariato, salvo essere riportato al nuovo massimo se lo supera.
+     */
+    public void changeMax(int newMax) {
+        if (newMax <= 0) {
+            throw new IllegalArgumentException("Il massimo deve essere positivo: " + newMax);
+        }
+        max = newMax;
+        current = Math.min(current, newMax);
     }
 
     /** Porta il valore al massimo. */

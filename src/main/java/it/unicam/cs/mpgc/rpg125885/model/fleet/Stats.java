@@ -27,4 +27,16 @@ public record Stats(
                 composure + other.composure,
                 readiness + other.readiness);
     }
+
+    /** Moltiplica ogni statistica per {@code factor}; serve ad accumulare le crescite per livello. */
+    public Stats times(int factor) {
+        return new Stats(
+                maxEndurance * factor,
+                maxResources * factor,
+                technique * factor,
+                medicine * factor,
+                coordination * factor,
+                composure * factor,
+                readiness * factor);
+    }
 }

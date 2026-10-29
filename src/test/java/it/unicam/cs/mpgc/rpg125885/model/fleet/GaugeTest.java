@@ -68,6 +68,26 @@ class GaugeTest {
     }
 
     @Test
+    void changeMaxRaisesLimitKeepingCurrent() {
+        Gauge gauge = new Gauge(50, 30);
+
+        gauge.changeMax(80);
+
+        assertEquals(80, gauge.max());
+        assertEquals(30, gauge.current());
+    }
+
+    @Test
+    void changeMaxLowersCurrentWhenAboveNewLimit() {
+        Gauge gauge = new Gauge(50);
+
+        gauge.changeMax(20);
+
+        assertEquals(20, gauge.current());
+        assertThrows(IllegalArgumentException.class, () -> gauge.changeMax(0));
+    }
+
+    @Test
     void rejectsInvalidConstruction() {
         assertThrows(IllegalArgumentException.class, () -> new Gauge(0));
         assertThrows(IllegalArgumentException.class, () -> new Gauge(10, -1));
