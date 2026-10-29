@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -129,6 +130,23 @@ class UnitTest {
 
         assertEquals(35, unit.experience());
         assertThrows(IllegalArgumentException.class, () -> unit.addExperience(-1));
+    }
+
+    @Test
+    void gaugeSelectsTheRequestedCounter() {
+        assertSame(unit.endurance(), unit.gauge(GaugeKind.ENDURANCE));
+        assertSame(unit.resources(), unit.gauge(GaugeKind.RESOURCES));
+    }
+
+    @Test
+    void coverLastsUntilEnded() {
+        assertFalse(unit.isCovered());
+
+        unit.takeCover();
+        assertTrue(unit.isCovered());
+
+        unit.endCover();
+        assertFalse(unit.isCovered());
     }
 
     @Test
