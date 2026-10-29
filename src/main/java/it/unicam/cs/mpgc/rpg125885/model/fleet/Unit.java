@@ -62,6 +62,14 @@ public final class Unit extends Combatant {
         return resources;
     }
 
+    /** Il contatore indicato da {@code kind}. */
+    public Gauge gauge(GaugeKind kind) {
+        return switch (kind) {
+            case ENDURANCE -> endurance();
+            case RESOURCES -> resources;
+        };
+    }
+
     /** Statistiche base del mezzo + crescita per i livelli oltre il primo + tratto + dotazioni. */
     public Stats effectiveStats() {
         Stats stats = type.baseStats()
