@@ -24,6 +24,7 @@ public final class Unit extends Combatant {
     private int level = FIRST_LEVEL;
     private int experience;
     private int busyUntilPhase;
+    private boolean covered;
 
     /** Crea un'unità di primo livello, con Resistenza e Risorse al massimo. */
     public Unit(String callsign, String crewLeader, VehicleType type, Trait trait) {
@@ -68,6 +69,19 @@ public final class Unit extends Combatant {
             case ENDURANCE -> endurance();
             case RESOURCES -> resources;
         };
+    }
+
+    /** Al riparo, lo stress subito è dimezzato fino a {@link #endCover()}. */
+    public boolean isCovered() {
+        return covered;
+    }
+
+    public void takeCover() {
+        covered = true;
+    }
+
+    public void endCover() {
+        covered = false;
     }
 
     /** Statistiche base del mezzo + crescita per i livelli oltre il primo + tratto + dotazioni. */

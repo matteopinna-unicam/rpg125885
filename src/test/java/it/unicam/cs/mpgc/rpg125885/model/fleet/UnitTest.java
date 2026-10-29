@@ -138,6 +138,16 @@ class UnitTest {
         assertSame(unit.resources(), unit.gauge(GaugeKind.RESOURCES));
     }
 
+    @Test
+    void coverLastsUntilEnded() {
+        assertFalse(unit.isCovered());
+
+        unit.takeCover();
+        assertTrue(unit.isCovered());
+
+        unit.endCover();
+        assertFalse(unit.isCovered());
+    }
 
     @Test
     void rejectsInvalidConstruction() {
