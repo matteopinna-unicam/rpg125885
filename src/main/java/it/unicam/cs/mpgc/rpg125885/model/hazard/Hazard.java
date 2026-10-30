@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 public final class Hazard extends Combatant {
 
-    private static final int NEVER_FACED = -1;
+    private static final int NEVER_FACED = Integer.MIN_VALUE;
 
     private final HazardTemplate template;
     private int lastFacedRound = NEVER_FACED;
