@@ -61,7 +61,7 @@ public final class XmlContentCatalog implements ContentCatalog {
     private final VehicleTypeRegistry vehicleTypes;
     private final Map<String, HazardTemplate> hazards = new HashMap<>();
     private final Map<String, Item> items = new HashMap<>();
-    private final Map<String, Trait> traits = new HashMap<>();
+    private final Map<String, Trait> traits = new LinkedHashMap<>();
     private final Map<String, Shift> shifts = new HashMap<>();
 
     /** Legge il contenuto incluso nel JAR. */
@@ -94,6 +94,11 @@ public final class XmlContentCatalog implements ContentCatalog {
     @Override
     public Trait trait(String id) {
         return require(traits, id, "Tratto");
+    }
+
+    @Override
+    public List<Trait> traits() {
+        return List.copyOf(traits.values());
     }
 
     @Override
