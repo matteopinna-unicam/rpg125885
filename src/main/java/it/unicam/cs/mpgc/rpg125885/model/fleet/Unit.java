@@ -147,6 +147,11 @@ public final class Unit extends Combatant {
         return phase >= busyUntilPhase;
     }
 
+    /** Prima fase in cui l'unità torna disponibile; serve al salvataggio. */
+    public int busyUntil() {
+        return busyUntilPhase;
+    }
+
     private void refreshLimits() {
         Stats stats = effectiveStats();
         endurance().changeMax(stats.maxEndurance());
