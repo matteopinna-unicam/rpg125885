@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:simpleType name="NonEmptyText">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Count">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Positive">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="CrisisValue">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="GearSlot">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="HEAD"/>
+            <xs:enumeration value="BODY"/>
+            <xs:enumeration value="TOOL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="CallOutcome">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="RESOLVED"/>
+            <xs:enumeration value="FAILED"/>
+            <xs:enumeration value="IGNORED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="savegame">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="fleet">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="unit" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="gear" minOccurs="0" maxOccurs="3">
+                                            <xs:complexType>
+                                                <xs:attribute name="slot" type="GearSlot" use="required"/>
+                                                <xs:attribute name="item" type="NonEmptyText" use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="callsign" type="NonEmptyText" use="required"/>
+                                    <xs:attribute name="crewLeader" type="NonEmptyText" use="required"/>
+                                    <xs:attribute name="type" type="NonEmptyText" use="required"/>
+                                    <xs:attribute name="trait" type="NonEmptyText" use="required"/>
+                                    <xs:attribute name="level" type="Positive" use="required"/>
+                                    <xs:attribute name="experience" type="Count" use="required"/>
+                                    <xs:attribute name="endurance" type="Count" use="required"/>
+                                    <xs:attribute name="resources" type="Count" use="required"/>
+                                    <xs:attribute name="busyUntil" type="Count" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="inventory">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="entry" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:attribute name="item" type="NonEmptyText" use="required"/>
+                                                <xs:attribute name="qty" type="Positive" use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="NonEmptyText" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="progress">
+                    <xs:complexType>
+                        <xs:attribute name="shift" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="phase" type="Count" use="required"/>
+                        <xs:attribute name="crisis" type="CrisisValue" use="required"/>
+                        <xs:attribute name="airAmbulanceUsed" type="xs:boolean" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="log">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="record" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="unit" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:attribute name="name" type="NonEmptyText" use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="scenario" type="NonEmptyText" use="required"/>
+                                    <xs:attribute name="outcome" type="CallOutcome" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="version" type="xs:int" use="required" fixed="1"/>
+            <xs:attribute name="savedAt" type="xs:dateTime" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

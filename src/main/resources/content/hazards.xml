@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hazards>
+    <hazard id="gas_leak" name="Fuga di gas" gravity="60" pace="4" stress="8" escalation="10"
+            behavior="escalating" xp="20">
+        <modifier type="TECHNICAL" value="1.5"/>
+        <modifier type="MEDICAL" value="0.4"/>
+        <modifier type="COORDINATION" value="1.0"/>
+    </hazard>
+    <hazard id="apartment_fire" name="Incendio in appartamento al 4° piano" gravity="80" pace="5"
+            stress="11" escalation="9" behavior="escalating" elevated="true" xp="26">
+        <modifier type="TECHNICAL" value="1.4"/>
+        <modifier type="MEDICAL" value="0.5"/>
+        <modifier type="COORDINATION" value="0.7"/>
+    </hazard>
+    <hazard id="cardiac_arrest" name="Arresto cardiaco" gravity="45" pace="6" stress="12" escalation="0"
+            behavior="steady" xp="22">
+        <modifier type="TECHNICAL" value="0.3"/>
+        <modifier type="MEDICAL" value="1.8"/>
+        <modifier type="COORDINATION" value="0.6"/>
+    </hazard>
+    <hazard id="crashed_vehicle" name="Veicolo incidentato" gravity="70" pace="4" stress="9" escalation="0"
+            behavior="steady" xp="20">
+        <modifier type="TECHNICAL" value="1.3"/>
+        <modifier type="MEDICAL" value="0.8"/>
+        <modifier type="COORDINATION" value="0.9"/>
+    </hazard>
+    <hazard id="flooding" name="Allagamento" gravity="90" pace="3" stress="7" escalation="12"
+            behavior="escalating" xp="25">
+        <modifier type="TECHNICAL" value="1.2"/>
+        <modifier type="MEDICAL" value="0.4"/>
+        <modifier type="COORDINATION" value="1.1"/>
+    </hazard>
+</hazards>

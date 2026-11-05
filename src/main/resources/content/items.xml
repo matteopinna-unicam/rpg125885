@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+    <gear id="helmet" name="Casco rinforzato" description="Protegge la testa e aiuta a mantenere la calma."
+          slot="HEAD" composure="2"/>
+    <gear id="medical_backpack" name="Zaino sanitario" description="Materiale di primo soccorso sempre a portata di mano."
+          slot="TOOL" medicine="3" maxResources="5"/>
+    <toolSupply id="foam_canister" name="Bombola di schiuma" description="Riduce subito la gravità di un pericolo."
+                reduction="20"/>
+    <recoverySupply id="energy_bar" name="Barretta energetica" description="Fa recuperare Resistenza a un'unità."
+                    gauge="ENDURANCE" amount="15"/>
+    <recoverySupply id="spare_kit" name="Kit di scorta" description="Fa recuperare Risorse a un'unità."
+                    gauge="RESOURCES" amount="10"/>
+</items>
