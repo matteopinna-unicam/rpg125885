@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shift id="red_shift">
+    <scenario id="via_tigli_gas" title="Odore di gas in condominio" district="Borgo Nuovo"
+              rounds="6" busyPhases="1" ignorePenalty="8" failPenalty="12">
+        <call>Pronto, 112? Nel palazzo c'è un odore fortissimo di gas, qualcuno ha sentito un botto...</call>
+        <hazard ref="gas_leak"/>
+        <requires agency="FIRE_BRIGADE" min="1"/>
+        <decision question="Il contatore generale è in cantina. Come procedete?">
+            <option text="Entrare subito" gravity="0" rounds="0" stress="10"/>
+            <option text="Attendere la chiusura del contatore" gravity="-20" rounds="-1" stress="0"/>
+        </decision>
+        <outcome success="Fuga chiusa, palazzo arieggiato: i residenti rientrano all'alba."
+                 failure="La squadra deve ritirarsi: il quartiere resta evacuato fino al mattino."/>
+        <reward item="helmet"/>
+    </scenario>
+    <scenario id="via_roma_crash" title="Scontro frontale in via Roma" district="Centro"
+              rounds="6" busyPhases="1" ignorePenalty="10" failPenalty="14">
+        <call>Un'auto è finita contro un furgone, c'è un ferito che non risponde e il traffico è bloccato.</call>
+        <hazard ref="crashed_vehicle"/>
+        <hazard ref="cardiac_arrest"/>
+        <requires agency="EMS" min="1"/>
+        <requires agency="POLICE" min="1"/>
+        <outcome success="Ferito stabilizzato e strada riaperta prima dell'alba."
+                 failure="Il ferito arriva in ospedale in condizioni critiche; la strada resta chiusa."/>
+        <reward item="energy_bar" quantity="2"/>
+    </scenario>
+    <scenario id="flooded_underpass" title="Sottopasso allagato" district="Zona Industriale"
+              rounds="7" busyPhases="2" ignorePenalty="12" failPenalty="16">
+        <call>Il sottopasso della tangenziale si sta riempiendo d'acqua, c'è un'auto con persone a bordo.</call>
+        <hazard ref="flooding"/>
+        <requires agency="FIRE_BRIGADE" min="1"/>
+        <requires agency="POLICE" min="1"/>
+        <outcome success="Occupanti in salvo e sottopasso prosciugato."
+                 failure="Le pompe non bastano: il sottopasso resta chiuso fino al mattino."/>
+        <reward unit="air_ambulance" callsign="ELI 1" crewLeader="Dott. Serra" trait="veteran"/>
+    </scenario>
+    <phase time="22:00" type="CALLS">
+        <offer ref="via_tigli_gas"/>
+        <offer ref="via_roma_crash"/>
+    </phase>
+    <phase time="23:00" type="CALLS">
+        <offer ref="flooded_underpass"/>
+    </phase>
+</shift>

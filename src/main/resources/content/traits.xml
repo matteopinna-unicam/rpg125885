@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<traits>
+    <trait id="veteran" name="Veterano" composure="2"/>
+    <trait id="empathic" name="Empatico" recoveryMultiplier="1.2"/>
+    <trait id="rookie" name="Novellino" experienceMultiplier="1.2"/>
+    <trait id="methodical" name="Metodico" technique="2"/>
+    <trait id="quick" name="Riflessi pronti" readiness="2"/>
+    <trait id="leader" name="Leader nato" coordination="2"/>
+</traits>

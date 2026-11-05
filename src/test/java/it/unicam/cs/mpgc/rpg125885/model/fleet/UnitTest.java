@@ -118,6 +118,7 @@ class UnitTest {
 
         unit.occupyUntil(4);
 
+        assertEquals(4, unit.busyUntil());
         assertFalse(unit.isAvailableAt(3));
         assertTrue(unit.isAvailableAt(4));
         assertTrue(unit.isAvailableAt(5));

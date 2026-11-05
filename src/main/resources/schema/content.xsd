@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Tipi semplici -->
+    <xs:simpleType name="NonEmptyText">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Count">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Positive">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Multiplier">
+        <xs:restriction base="xs:decimal">
+            <xs:minExclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TimeOfDay">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([01][0-9]|2[0-3]):[0-5][0-9]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="InterventionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="TECHNICAL"/>
+            <xs:enumeration value="MEDICAL"/>
+            <xs:enumeration value="COORDINATION"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Agency">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="FIRE_BRIGADE"/>
+            <xs:enumeration value="EMS"/>
+            <xs:enumeration value="POLICE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="GaugeKind">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ENDURANCE"/>
+            <xs:enumeration value="RESOURCES"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="GearSlot">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="HEAD"/>
+            <xs:enumeration value="BODY"/>
+            <xs:enumeration value="TOOL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="PhaseType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CALLS"/>
+            <xs:enumeration value="BASE"/>
+            <xs:enumeration value="FINALE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Bonus alle sette statistiche; gli attributi assenti valgono zero -->
+    <xs:attributeGroup name="StatBonus">
+        <xs:attribute name="maxEndurance" type="xs:int"/>
+        <xs:attribute name="maxResources" type="xs:int"/>
+        <xs:attribute name="technique" type="xs:int"/>
+        <xs:attribute name="medicine" type="xs:int"/>
+        <xs:attribute name="coordination" type="xs:int"/>
+        <xs:attribute name="composure" type="xs:int"/>
+        <xs:attribute name="readiness" type="xs:int"/>
+    </xs:attributeGroup>
+
+    <!-- hazards.xml -->
+    <xs:element name="hazards">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="hazard" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="modifier" minOccurs="0" maxOccurs="3">
+                                <xs:complexType>
+                                    <xs:attribute name="type" type="InterventionType" use="required"/>
+                                    <xs:attribute name="value" type="Multiplier" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:ID" use="required"/>
+                        <xs:attribute name="name" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="gravity" type="Positive" use="required"/>
+                        <xs:attribute name="pace" type="xs:int" use="required"/>
+                        <xs:attribute name="stress" type="Count" use="required"/>
+                        <xs:attribute name="escalation" type="Count" use="required"/>
+                        <xs:attribute name="behavior" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="elevated" type="xs:boolean"/>
+                        <xs:attribute name="xp" type="Count" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- items.xml -->
+    <xs:element name="items">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="gear">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="xs:ID" use="required"/>
+                        <xs:attribute name="name" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="description" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="slot" type="GearSlot" use="required"/>
+                        <xs:attributeGroup ref="StatBonus"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="toolSupply">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="xs:ID" use="required"/>
+                        <xs:attribute name="name" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="description" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="reduction" type="Positive" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="recoverySupply">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="xs:ID" use="required"/>
+                        <xs:attribute name="name" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="description" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="gauge" type="GaugeKind" use="required"/>
+                        <xs:attribute name="amount" type="Positive" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- traits.xml -->
+    <xs:element name="traits">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="trait" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="xs:ID" use="required"/>
+                        <xs:attribute name="name" type="NonEmptyText" use="required"/>
+                        <xs:attributeGroup ref="StatBonus"/>
+                        <xs:attribute name="recoveryMultiplier" type="Multiplier"/>
+                        <xs:attribute name="experienceMultiplier" type="Multiplier"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- shift.xml: prima le chiamate, poi le fasi che le offrono -->
+    <xs:element name="shift">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="scenario" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="call" type="NonEmptyText"/>
+                            <xs:element name="hazard" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="ref" type="NonEmptyText" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="requires" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="agency" type="Agency" use="required"/>
+                                    <xs:attribute name="min" type="Positive" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="requiresVehicle" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="type" type="NonEmptyText" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="decision" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="option" minOccurs="2" maxOccurs="2">
+                                            <xs:complexType>
+                                                <xs:attribute name="text" type="NonEmptyText" use="required"/>
+                                                <xs:attribute name="gravity" type="xs:int" use="required"/>
+                                                <xs:attribute name="rounds" type="xs:int" use="required"/>
+                                                <xs:attribute name="stress" type="Count" use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="question" type="NonEmptyText" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="outcome">
+                                <xs:complexType>
+                                    <xs:attribute name="success" type="NonEmptyText" use="required"/>
+                                    <xs:attribute name="failure" type="NonEmptyText" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <!-- item (+ quantity) oppure unit (+ callsign, crewLeader, trait): coerenza verificata alla lettura -->
+                            <xs:element name="reward" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:attribute name="item" type="NonEmptyText"/>
+                                    <xs:attribute name="quantity" type="Positive"/>
+                                    <xs:attribute name="unit" type="NonEmptyText"/>
+                                    <xs:attribute name="callsign" type="NonEmptyText"/>
+                                    <xs:attribute name="crewLeader" type="NonEmptyText"/>
+                                    <xs:attribute name="trait" type="NonEmptyText"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="id" type="xs:ID" use="required"/>
+                        <xs:attribute name="title" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="district" type="NonEmptyText" use="required"/>
+                        <xs:attribute name="rounds" type="Positive" use="required"/>
+                        <xs:attribute name="busyPhases" type="Count" use="required"/>
+                        <xs:attribute name="ignorePenalty" type="Count" use="required"/>
+                        <xs:attribute name="failPenalty" type="Count" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="phase" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="offer" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="ref" type="xs:IDREF" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="time" type="TimeOfDay" use="required"/>
+                        <xs:attribute name="type" type="PhaseType" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="NonEmptyText" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
