@@ -2,12 +2,26 @@
 <items>
     <gear id="helmet" name="Casco rinforzato" description="Protegge la testa e aiuta a mantenere la calma."
           slot="HEAD" composure="2"/>
+    <gear id="headlamp" name="Torcia frontale" description="Luce libera per le mani: più precisione e sangue freddo."
+          slot="HEAD" technique="2" composure="1"/>
+    <gear id="hi_vis_jacket" name="Giacca ad alta visibilità" description="Rende la squadra visibile e sicura sulla scena."
+          slot="BODY" coordination="2" composure="2"/>
+    <gear id="digital_radio" name="Radio digitale" description="Comunicazioni chiare con la centrale e tra le squadre."
+          slot="TOOL" coordination="3" readiness="1"/>
     <gear id="medical_backpack" name="Zaino sanitario" description="Materiale di primo soccorso sempre a portata di mano."
           slot="TOOL" medicine="3" maxResources="5"/>
+    <gear id="tool_kit" name="Kit attrezzi" description="Attrezzatura completa per gli interventi tecnici."
+          slot="TOOL" technique="4"/>
     <toolSupply id="foam_canister" name="Bombola di schiuma" description="Riduce subito la gravità di un pericolo."
                 reduction="20"/>
+    <toolSupply id="extinguisher" name="Estintore" description="Riduce la gravità di un pericolo."
+                reduction="25"/>
+    <toolSupply id="aed" name="Defibrillatore (DAE)" description="Riduce subito la gravità di un'emergenza sanitaria."
+                reduction="35"/>
     <recoverySupply id="energy_bar" name="Barretta energetica" description="Fa recuperare Resistenza a un'unità."
-                    gauge="ENDURANCE" amount="15"/>
+                    gauge="ENDURANCE" amount="30"/>
+    <recoverySupply id="refill_kit" name="Kit di ripristino" description="Fa recuperare Risorse a un'unità."
+                    gauge="RESOURCES" amount="15"/>
     <recoverySupply id="spare_kit" name="Kit di scorta" description="Fa recuperare Risorse a un'unità."
                     gauge="RESOURCES" amount="10"/>
 </items>
