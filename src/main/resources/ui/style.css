@@ -1,0 +1,25 @@
+.root {
+    -fx-font-size: 14px;
+    -fx-base: #2b2d33;
+    -fx-accent: #d64541;
+    -fx-focus-color: #d64541;
+}
+
+.title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ff6b5e;
+}
+
+.section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-background-radius: 4;
+}
+
+.progress-bar > .bar {
+    -fx-background-color: #d64541;
+}

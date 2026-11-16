@@ -1,19 +1,24 @@
 package it.unicam.cs.mpgc.rpg125885.ui.javafx;
 
+import it.unicam.cs.mpgc.rpg125885.app.AppContext;
+import it.unicam.cs.mpgc.rpg125885.persistence.PersistenceException;
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 public class RpgApplication extends Application {
 
-    private static final String TITLE = "Il Turno Rosso";
-
     @Override
     public void start(Stage stage) {
-        stage.setTitle(TITLE);
-        stage.setScene(new Scene(new StackPane(new Label(TITLE)), 800, 600));
-        stage.show();
+        try {
+            AppContext context = AppContext.create();
+            SceneNavigator navigator = new SceneNavigator(stage, context.gameService());
+            navigator.showMainMenu();
+            stage.show();
+        } catch (PersistenceException e) {
+            new Alert(Alert.AlertType.ERROR, "Impossibile avviare il gioco: " + e.getMessage()).showAndWait();
+            Platform.exit();
+        }
     }
 }

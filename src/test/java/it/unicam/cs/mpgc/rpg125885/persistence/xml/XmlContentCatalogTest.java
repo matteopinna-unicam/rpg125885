@@ -87,13 +87,24 @@ class XmlContentCatalogTest {
     void shiftLinksPhasesToTheScenariosTheyOffer() {
         Shift shift = catalog.shift("red_shift");
 
-        assertEquals(2, shift.phaseCount());
+        assertEquals(9, shift.phaseCount());
         Phase first = shift.phaseAt(0);
         assertEquals("22:00", first.time());
         assertEquals(PhaseType.CALLS, first.type());
         assertEquals(List.of("via_tigli_gas", "via_roma_crash"), first.scenarios().stream().map(Scenario::id).toList());
-        assertEquals(List.of("flooded_underpass"),
-                shift.phaseAt(1).scenarios().stream().map(Scenario::id).toList());
+        assertEquals(List.of("flooded_underpass", "ring_road_tree"),
+                shift.phaseAt(2).scenarios().stream().map(Scenario::id).toList());
+    }
+
+    @Test
+    void nightHasABaseBreakAndAFinale() {
+        Shift shift = catalog.shift("red_shift");
+
+        assertEquals(PhaseType.BASE, shift.phaseAt(4).type());
+        assertTrue(shift.phaseAt(4).scenarios().isEmpty());
+        assertEquals(PhaseType.FINALE, shift.phaseAt(8).type());
+        assertEquals("06:00", shift.phaseAt(8).time());
+        assertEquals(1, shift.phaseAt(8).scenarios().size());
     }
 
     @Test

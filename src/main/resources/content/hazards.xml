@@ -30,4 +30,46 @@
         <modifier type="MEDICAL" value="0.4"/>
         <modifier type="COORDINATION" value="1.1"/>
     </hazard>
+    <hazard id="stranded_on_roof" name="Persone isolate sul tetto" gravity="60" pace="4" stress="8" escalation="0"
+            behavior="steady" elevated="true" xp="22">
+        <modifier type="TECHNICAL" value="1.2"/>
+        <modifier type="MEDICAL" value="0.8"/>
+        <modifier type="COORDINATION" value="0.8"/>
+    </hazard>
+    <hazard id="panicking_crowd" name="Folla in panico" gravity="80" pace="6" stress="10" escalation="0"
+            behavior="spreading" xp="24">
+        <modifier type="TECHNICAL" value="0.4"/>
+        <modifier type="MEDICAL" value="0.7"/>
+        <modifier type="COORDINATION" value="1.8"/>
+    </hazard>
+    <hazard id="traffic_chaos" name="Viabilità bloccata" gravity="55" pace="3" stress="6" escalation="8"
+            behavior="escalating" xp="16">
+        <modifier type="TECHNICAL" value="0.6"/>
+        <modifier type="MEDICAL" value="0.3"/>
+        <modifier type="COORDINATION" value="1.7"/>
+    </hazard>
+    <hazard id="fallen_tree" name="Albero sulla carreggiata" gravity="50" pace="3" stress="6" escalation="0"
+            behavior="steady" xp="14">
+        <modifier type="TECHNICAL" value="1.5"/>
+        <modifier type="MEDICAL" value="0.3"/>
+        <modifier type="COORDINATION" value="0.8"/>
+    </hazard>
+    <hazard id="generator_failure" name="Generatore in avaria" gravity="150" pace="5" stress="12" escalation="15"
+            behavior="escalating" xp="60">
+        <modifier type="TECHNICAL" value="1.5"/>
+        <modifier type="MEDICAL" value="0.3"/>
+        <modifier type="COORDINATION" value="0.8"/>
+    </hazard>
+    <hazard id="ward_evacuation" name="Reparto da evacuare" gravity="130" pace="4" stress="11" escalation="0"
+            behavior="spreading" elevated="true" xp="50">
+        <modifier type="TECHNICAL" value="0.6"/>
+        <modifier type="MEDICAL" value="1.0"/>
+        <modifier type="COORDINATION" value="1.6"/>
+    </hazard>
+    <hazard id="critical_patients" name="Pazienti critici" gravity="120" pace="7" stress="14" escalation="0"
+            behavior="steady" xp="50">
+        <modifier type="TECHNICAL" value="0.3"/>
+        <modifier type="MEDICAL" value="1.7"/>
+        <modifier type="COORDINATION" value="0.8"/>
+    </hazard>
 </hazards>

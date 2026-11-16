@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shift id="red_shift">
+
+    <!-- 22:00 -->
     <scenario id="via_tigli_gas" title="Odore di gas in condominio" district="Borgo Nuovo"
               rounds="6" busyPhases="1" ignorePenalty="8" failPenalty="12">
         <call>Pronto, 112? Nel palazzo c'è un odore fortissimo di gas, qualcuno ha sentito un botto...</call>
@@ -24,6 +26,37 @@
                  failure="Il ferito arriva in ospedale in condizioni critiche; la strada resta chiusa."/>
         <reward item="energy_bar" quantity="2"/>
     </scenario>
+
+    <!-- 23:00 -->
+    <scenario id="via_pini_fire" title="Incendio al quarto piano" district="Colle Alto"
+              rounds="7" busyPhases="1" ignorePenalty="12" failPenalty="16">
+        <call>Dalle finestre del quarto piano esce fumo nero. I vicini dicono che dentro non c'è più nessuno, ma non ne sono sicuri.</call>
+        <hazard ref="apartment_fire"/>
+        <requires agency="FIRE_BRIGADE" min="1"/>
+        <requiresVehicle type="aerial_ladder"/>
+        <decision question="Il vano scale è pieno di fumo. Come salite?">
+            <option text="Salire dalle scale con gli autorespiratori" gravity="0" rounds="0" stress="8"/>
+            <option text="Attendere l'Autoscala in posizione" gravity="10" rounds="-1" stress="0"/>
+        </decision>
+        <outcome success="Fiamme spente e appartamento messo in sicurezza: nessuno è rimasto coinvolto."
+                 failure="L'incendio si estende al piano superiore: la palazzina viene evacuata."/>
+        <reward item="extinguisher" quantity="2"/>
+    </scenario>
+    <scenario id="home_collapse" title="Malore in casa" district="Borgo Nuovo"
+              rounds="5" busyPhases="1" ignorePenalty="8" failPenalty="12">
+        <call>Mio marito si è accasciato in cucina, respira a fatica e non mi risponde. Fate presto, vi prego.</call>
+        <hazard ref="cardiac_arrest"/>
+        <requires agency="EMS" min="1"/>
+        <decision question="La porta d'ingresso è chiusa dall'interno. Come entrate?">
+            <option text="Forzare subito la porta" gravity="0" rounds="0" stress="6"/>
+            <option text="Farsi aprire dal vicino con la chiave" gravity="15" rounds="1" stress="0"/>
+        </decision>
+        <outcome success="Il paziente è stabilizzato e viene trasportato in ospedale."
+                 failure="I soccorsi arrivano troppo tardi per un recupero completo; la famiglia viene assistita."/>
+        <reward item="aed"/>
+    </scenario>
+
+    <!-- 00:00 -->
     <scenario id="flooded_underpass" title="Sottopasso allagato" district="Zona Industriale"
               rounds="7" busyPhases="2" ignorePenalty="12" failPenalty="16">
         <call>Il sottopasso della tangenziale si sta riempiendo d'acqua, c'è un'auto con persone a bordo.</call>
@@ -34,11 +67,188 @@
                  failure="Le pompe non bastano: il sottopasso resta chiuso fino al mattino."/>
         <reward unit="air_ambulance" callsign="ELI 1" crewLeader="Dott. Serra" trait="veteran"/>
     </scenario>
+    <scenario id="ring_road_tree" title="Albero caduto sulla circonvallazione" district="Colle Alto"
+              rounds="5" busyPhases="1" ignorePenalty="6" failPenalty="10">
+        <call>Un grosso albero ha invaso la carreggiata e le auto si accodano in entrambe le direzioni.</call>
+        <hazard ref="fallen_tree"/>
+        <hazard ref="traffic_chaos"/>
+        <requires agency="POLICE" min="1"/>
+        <outcome success="Albero rimosso e circolazione ripristinata."
+                 failure="La carreggiata resta chiusa e il traffico viene deviato per ore."/>
+        <reward item="headlamp"/>
+    </scenario>
+
+    <!-- 01:00 -->
+    <scenario id="concert_crowd" title="Folla in panico all'uscita del concerto" district="Centro"
+              rounds="6" busyPhases="1" ignorePenalty="14" failPenalty="18">
+        <call>Un petardo ha spaventato il pubblico all'uscita del teatro. La folla spinge verso i cancelli, ci sono persone a terra.</call>
+        <hazard ref="panicking_crowd"/>
+        <requires agency="POLICE" min="1"/>
+        <requires agency="EMS" min="1"/>
+        <decision question="I cancelli laterali sono chiusi. Che cosa fate?">
+            <option text="Aprire subito i cancelli laterali" gravity="-10" rounds="0" stress="8"/>
+            <option text="Incanalare la folla verso l'uscita principale" gravity="-25" rounds="-1" stress="0"/>
+        </decision>
+        <outcome success="La folla si disperde in ordine e i contusi vengono assistiti sul posto."
+                 failure="La situazione degenera: l'area viene transennata e molte persone vanno in ospedale."/>
+        <reward item="hi_vis_jacket"/>
+    </scenario>
+    <scenario id="rooftop_rescue" title="Persone isolate sul tetto" district="Porto Fluviale"
+              rounds="7" busyPhases="2" ignorePenalty="12" failPenalty="16">
+        <call>L'acqua del canale è salita e una famiglia è bloccata sul tetto di un capannone. Hanno con sé un bambino piccolo.</call>
+        <hazard ref="stranded_on_roof"/>
+        <requires agency="FIRE_BRIGADE" min="1"/>
+        <requiresVehicle type="aerial_ladder"/>
+        <outcome success="La famiglia è in salvo e viene accompagnata in un luogo riparato."
+                 failure="Il recupero è rimandato a luce piena: la famiglia resta assistita sul tetto."/>
+        <reward unit="ambulance" callsign="Ambulanza 9" crewLeader="Chiara" trait="empathic"/>
+    </scenario>
+
+    <!-- 02:00: sosta in base -->
+
+    <!-- 03:00 -->
+    <scenario id="highway_pileup" title="Tamponamento a catena in tangenziale" district="Zona Industriale"
+              rounds="8" busyPhases="2" ignorePenalty="16" failPenalty="20">
+        <call>Nebbia fitta in tangenziale: diversi veicoli coinvolti, feriti tra le lamiere e corsie bloccate.</call>
+        <hazard ref="crashed_vehicle"/>
+        <hazard ref="traffic_chaos"/>
+        <hazard ref="cardiac_arrest"/>
+        <requires agency="EMS" min="1"/>
+        <requires agency="POLICE" min="1"/>
+        <requires agency="FIRE_BRIGADE" min="1"/>
+        <decision question="Le corsie sono bloccate e i feriti sono in più punti. Da dove iniziate?">
+            <option text="Soccorrere prima i feriti" gravity="-10" rounds="0" stress="8"/>
+            <option text="Mettere in sicurezza la strada" gravity="-20" rounds="-1" stress="0"/>
+        </decision>
+        <outcome success="Tutti i feriti sono assistiti e la tangenziale viene riaperta."
+                 failure="I soccorsi proseguono fino all'alba: la tangenziale resta chiusa."/>
+        <reward item="digital_radio"/>
+    </scenario>
+    <scenario id="warehouse_fire" title="Incendio in un magazzino" district="Zona Industriale"
+              rounds="8" busyPhases="2" ignorePenalty="14" failPenalty="18">
+        <call>Dal magazzino della ditta di vernici esce un fumo denso e si sente odore di gas. Nessuno risponde al telefono del custode.</call>
+        <hazard ref="apartment_fire"/>
+        <hazard ref="gas_leak"/>
+        <requires agency="FIRE_BRIGADE" min="2"/>
+        <outcome success="Incendio domato e fuga di gas chiusa: il magazzino viene dichiarato sicuro."
+                 failure="Le fiamme si propagano ai capannoni vicini: l'area viene evacuata."/>
+        <reward item="tool_kit"/>
+    </scenario>
+    <scenario id="care_home_alert" title="Allarme in casa di riposo" district="Borgo Nuovo"
+              rounds="5" busyPhases="1" ignorePenalty="8" failPenalty="12">
+        <call>Un'ospite non risponde più. Siamo in due di turno e abbiamo bisogno di un medico subito.</call>
+        <hazard ref="cardiac_arrest"/>
+        <requires agency="EMS" min="1"/>
+        <outcome success="L'ospite è stabilizzata e trasferita in ospedale."
+                 failure="L'ospite arriva in ospedale in condizioni gravi; la struttura riceve supporto."/>
+        <reward item="refill_kit"/>
+    </scenario>
+
+    <!-- 04:00 -->
+    <scenario id="school_gas" title="Fuga di gas vicino alla scuola" district="Colle Alto"
+              rounds="6" busyPhases="1" ignorePenalty="12" failPenalty="16">
+        <call>C'è un forte odore di gas davanti alla scuola. Il custode ha visto un tubo danneggiato e un gruppo di curiosi si è fermato lì.</call>
+        <hazard ref="gas_leak"/>
+        <hazard ref="panicking_crowd"/>
+        <requires agency="FIRE_BRIGADE" min="1"/>
+        <requires agency="POLICE" min="1"/>
+        <decision question="I curiosi sono vicini al tubo. Come procedete?">
+            <option text="Allontanare subito tutti" gravity="-10" rounds="0" stress="8"/>
+            <option text="Prima chiudere la valvola, poi allontanare" gravity="-20" rounds="-1" stress="0"/>
+        </decision>
+        <outcome success="Valvola chiusa e area sgomberata: la scuola riaprirà regolarmente."
+                 failure="L'area resta chiusa e la scuola sospende le lezioni."/>
+        <reward item="foam_canister"/>
+    </scenario>
+    <scenario id="factory_accident" title="Mezzo pesante ribaltato" district="Zona Industriale"
+              rounds="7" busyPhases="1" ignorePenalty="12" failPenalty="16">
+        <call>Un autoarticolato si è ribaltato davanti allo stabilimento. L'autista è bloccato in cabina e parla a fatica.</call>
+        <hazard ref="crashed_vehicle"/>
+        <hazard ref="cardiac_arrest"/>
+        <requires agency="EMS" min="1"/>
+        <requires agency="FIRE_BRIGADE" min="1"/>
+        <outcome success="L'autista viene liberato e trasportato in ospedale."
+                 failure="La liberazione richiede tempo: l'autista viene stabilizzato in condizioni gravi."/>
+        <reward item="energy_bar" quantity="2"/>
+    </scenario>
+
+    <!-- 05:00 -->
+    <scenario id="river_flood" title="Esondazione del torrente" district="Porto Fluviale"
+              rounds="8" busyPhases="2" ignorePenalty="16" failPenalty="20">
+        <call>Il torrente è esondato e l'acqua sale nelle strade. Alcune persone sono salite sui tetti delle auto.</call>
+        <hazard ref="flooding"/>
+        <hazard ref="stranded_on_roof"/>
+        <requires agency="FIRE_BRIGADE" min="1"/>
+        <requires agency="POLICE" min="1"/>
+        <requiresVehicle type="aerial_ladder"/>
+        <decision question="L'acqua continua a salire. Quale intervento anticipate?">
+            <option text="Recuperare per prime le persone isolate" gravity="-10" rounds="0" stress="8"/>
+            <option text="Sbarrare le strade e poi recuperare" gravity="-20" rounds="-1" stress="0"/>
+        </decision>
+        <outcome success="Tutte le persone sono state recuperate e il quartiere è assistito."
+                 failure="Il livello dell'acqua non scende: i recuperi proseguono con l'aiuto dei mezzi nautici."/>
+        <reward item="hi_vis_jacket"/>
+    </scenario>
+    <scenario id="storm_traffic" title="Viabilità bloccata dal maltempo" district="Centro"
+              rounds="5" busyPhases="1" ignorePenalty="6" failPenalty="10">
+        <call>Il temporale ha fatto cadere rami e semafori spenti: il centro è completamente intasato.</call>
+        <hazard ref="traffic_chaos"/>
+        <hazard ref="fallen_tree"/>
+        <requires agency="POLICE" min="1"/>
+        <outcome success="La viabilità torna regolare prima del mattino."
+                 failure="Il traffico resta congestionato fino all'ora di punta."/>
+        <reward item="refill_kit"/>
+    </scenario>
+
+    <!-- 06:00: finale -->
+    <scenario id="hospital_blackout" title="Black-out all'ospedale" district="Ospedale"
+              rounds="10" busyPhases="0" ignorePenalty="40" failPenalty="40">
+        <call>Il generatore dell'ospedale non parte dopo il black-out: servono mezzi tecnici per ripristinare la corrente e sanitari per i reparti più critici.</call>
+        <hazard ref="generator_failure"/>
+        <hazard ref="ward_evacuation"/>
+        <hazard ref="critical_patients"/>
+        <requires agency="FIRE_BRIGADE" min="1"/>
+        <requires agency="EMS" min="1"/>
+        <requires agency="POLICE" min="1"/>
+        <decision question="La corrente non torna. Da dove cominciate?">
+            <option text="Ripristinare il generatore" gravity="-10" rounds="0" stress="8"/>
+            <option text="Evacuare prima i reparti critici" gravity="-20" rounds="-1" stress="0"/>
+        </decision>
+        <outcome success="Corrente ripristinata e reparti al sicuro: l'ospedale riapre all'alba."
+                 failure="L'ospedale prosegue con i generatori di emergenza: la città resta in allerta."/>
+    </scenario>
+
     <phase time="22:00" type="CALLS">
         <offer ref="via_tigli_gas"/>
         <offer ref="via_roma_crash"/>
     </phase>
     <phase time="23:00" type="CALLS">
+        <offer ref="via_pini_fire"/>
+        <offer ref="home_collapse"/>
+    </phase>
+    <phase time="00:00" type="CALLS">
         <offer ref="flooded_underpass"/>
+        <offer ref="ring_road_tree"/>
+    </phase>
+    <phase time="01:00" type="CALLS">
+        <offer ref="concert_crowd"/>
+        <offer ref="rooftop_rescue"/>
+    </phase>
+    <phase time="02:00" type="BASE"/>
+    <phase time="03:00" type="CALLS">
+        <offer ref="highway_pileup"/>
+        <offer ref="warehouse_fire"/>
+        <offer ref="care_home_alert"/>
+    </phase>
+    <phase time="04:00" type="CALLS">
+        <offer ref="school_gas"/>
+        <offer ref="factory_accident"/>
+    </phase>
+    <phase time="05:00" type="CALLS">
+        <offer ref="river_flood"/>
+        <offer ref="storm_traffic"/>
+    </phase>
+    <phase time="06:00" type="FINALE">
+        <offer ref="hospital_blackout"/>
     </phase>
 </shift>
