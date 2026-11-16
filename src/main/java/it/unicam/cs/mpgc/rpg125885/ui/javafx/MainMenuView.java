@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.rpg125885.ui.javafx;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,7 +12,6 @@ final class MainMenuView extends VBox {
 
     private static final double SPACING = 16;
     private static final double BUTTON_WIDTH = 240;
-    private static final double TITLE_SIZE = 36;
 
     MainMenuView(SceneNavigator navigator) {
         super(SPACING);
@@ -19,12 +19,13 @@ final class MainMenuView extends VBox {
         setPadding(new Insets(SPACING));
 
         Label title = new Label("Il Turno Rosso");
-        title.setStyle("-fx-font-size: " + TITLE_SIZE + "px; -fx-font-weight: bold;");
+        title.getStyleClass().add("title");
         Label subtitle = new Label("Una notte alla centrale operativa di Castelvento");
 
         getChildren().addAll(title, subtitle,
                 button("Nuova partita", navigator::showFleetBuilder),
-                button("Esci", () -> javafx.application.Platform.exit()));
+                button("Carica partita", navigator::showLoadGame),
+                button("Esci", Platform::exit));
     }
 
     private static Button button(String text, Runnable action) {

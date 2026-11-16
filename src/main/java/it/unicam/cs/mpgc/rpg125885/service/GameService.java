@@ -19,6 +19,7 @@ import it.unicam.cs.mpgc.rpg125885.model.fleet.VehicleType;
 import it.unicam.cs.mpgc.rpg125885.model.item.Gear;
 import it.unicam.cs.mpgc.rpg125885.model.item.GearSlot;
 import it.unicam.cs.mpgc.rpg125885.model.item.Item;
+import it.unicam.cs.mpgc.rpg125885.model.item.Supply;
 import it.unicam.cs.mpgc.rpg125885.model.shift.CallRecord;
 import it.unicam.cs.mpgc.rpg125885.model.shift.CrisisIndex;
 import it.unicam.cs.mpgc.rpg125885.model.shift.DecisionOption;
@@ -200,6 +201,18 @@ public final class GameService {
     }
 
     // --- Base e flotta ---
+
+    /** I consumabili posseduti, utilizzabili durante un intervento. */
+    public List<Supply> supplies() {
+        return fleet().inventory().stream().map(Map.Entry::getKey)
+                .filter(Supply.class::isInstance).map(Supply.class::cast).toList();
+    }
+
+    /** Le dotazioni in inventario, pronte da equipaggiare. */
+    public List<Gear> spareGear() {
+        return fleet().inventory().stream().map(Map.Entry::getKey)
+                .filter(Gear.class::isInstance).map(Gear.class::cast).toList();
+    }
 
     public void applyBase(BaseOption option) {
         currentDirector().applyBase(option);

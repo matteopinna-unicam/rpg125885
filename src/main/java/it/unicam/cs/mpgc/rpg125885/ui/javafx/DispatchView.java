@@ -48,6 +48,7 @@ final class DispatchView extends BorderPane {
         setTop(buildHeader());
         setLeft(buildCallPane());
         setCenter(buildAssignmentPane());
+        setBottom(buildFooter());
         refreshHeader();
         callList.getItems().setAll(game.calls());
     }
@@ -82,6 +83,16 @@ final class DispatchView extends BorderPane {
                 unitBoxes, previewLabel, new HBox(SPACING, assignButton, unassignButton));
         pane.setPadding(new Insets(0, 0, 0, SPACING));
         return pane;
+    }
+
+    private HBox buildFooter() {
+        Button fleet = new Button("Flotta e salvataggio");
+        fleet.setOnAction(event -> navigator.showFleet());
+        Button start = new Button("Avvia gli interventi");
+        start.setOnAction(event -> navigator.showNextIntervention());
+        HBox footer = new HBox(SPACING, fleet, start);
+        footer.setPadding(new Insets(SPACING, 0, 0, 0));
+        return footer;
     }
 
     private void showCall(Scenario scenario) {
