@@ -39,6 +39,7 @@ import it.unicam.cs.mpgc.rpg125885.model.shift.PhaseType;
 import it.unicam.cs.mpgc.rpg125885.model.shift.Requirements;
 import it.unicam.cs.mpgc.rpg125885.model.shift.Scenario;
 import it.unicam.cs.mpgc.rpg125885.model.shift.Shift;
+import it.unicam.cs.mpgc.rpg125885.model.shift.ShiftReport;
 import it.unicam.cs.mpgc.rpg125885.persistence.GameRepository;
 import it.unicam.cs.mpgc.rpg125885.persistence.PersistenceException;
 import it.unicam.cs.mpgc.rpg125885.persistence.SaveSlotInfo;
@@ -108,6 +109,12 @@ class GameServiceTest {
     }
 
     @Test
+    void vehicleTypeNamesComeFromTheRegistry() {
+        assertEquals(new AerialLadder().displayName(), service.vehicleTypeName(new AerialLadder().id()));
+        assertThrows(IllegalArgumentException.class, () -> service.vehicleTypeName("unknown"));
+    }
+
+    @Test
     void aNewGameStartsAtTwentyCrisisInTheFirstPhase() {
         startWithFourUnits();
 
@@ -152,6 +159,11 @@ class GameServiceTest {
         assertEquals(GameService.INITIAL_CRISIS - 5, service.crisisIndex().value());
         assertEquals(1, service.phaseIndex());
         assertEquals(1, service.callLog().size());
+
+        ShiftReport shiftReport = service.shiftReport();
+        assertEquals(1, shiftReport.count(CallOutcome.RESOLVED));
+        assertEquals(service.crisisIndex().value(), shiftReport.finalCrisis());
+        assertEquals(engine.name(), shiftReport.bestUnits().getFirst().unitName());
     }
 
     @Test

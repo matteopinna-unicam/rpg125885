@@ -28,6 +28,7 @@ final class DispatchView extends BorderPane {
     private static final double CRISIS_BAR_WIDTH = 300;
     private static final double CALL_PANE_WIDTH = 380;
     private static final String PERCENT_FORMAT = "%.0f%%";
+    private static final double PERCENT = 100.0;
 
     private final GameService game;
     private final SceneNavigator navigator;
@@ -131,7 +132,7 @@ final class DispatchView extends BorderPane {
             previewLabel.setText(assessment.isSatisfied()
                     ? "Requisiti soddisfatti: efficacia piena."
                     : "Manca: " + String.join(", ", assessment.missing())
-                    + "\nEfficacia: " + String.format(PERCENT_FORMAT, assessment.efficiency() * 100));
+                    + "\nEfficacia: " + String.format(PERCENT_FORMAT, assessment.efficiency() * PERCENT));
         }
         updateButtons(scenario);
     }
@@ -191,11 +192,14 @@ final class DispatchView extends BorderPane {
         return String.join(", ", scenario.hazards().stream().map(h -> h.name() + " (" + h.gravity() + ")").toList());
     }
 
-    private static String requirementsText(Scenario scenario) {
+    private String requirementsText(Scenario scenario) {
         List<String> parts = new ArrayList<>();
         scenario.requirements().minimumByAgency()
                 .forEach((agency, min) -> parts.add(agency.displayName() + " ≥ " + min));
-        parts.addAll(scenario.requirements().requiredVehicleTypes());
+        scenario.requirements().requiredVehicleTypes().stream()
+                .map(game::vehicleTypeName)
+                .sorted()
+                .forEach(parts::add);
         return parts.isEmpty() ? "nessuno" : String.join(", ", parts);
     }
 
