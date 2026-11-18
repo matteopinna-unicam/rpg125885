@@ -23,3 +23,13 @@
 .progress-bar > .bar {
     -fx-background-color: #d64541;
 }
+
+.stat-up {
+    -fx-text-fill: #4caf50;
+    -fx-font-weight: bold;
+}
+
+.stat-down {
+    -fx-text-fill: #e5534b;
+    -fx-font-weight: bold;
+}

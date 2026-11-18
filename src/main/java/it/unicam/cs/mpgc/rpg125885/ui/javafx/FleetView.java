@@ -1,6 +1,5 @@
 package it.unicam.cs.mpgc.rpg125885.ui.javafx;
 
-import it.unicam.cs.mpgc.rpg125885.model.fleet.Stats;
 import it.unicam.cs.mpgc.rpg125885.model.fleet.Unit;
 import it.unicam.cs.mpgc.rpg125885.model.item.Gear;
 import it.unicam.cs.mpgc.rpg125885.model.item.GearSlot;
@@ -24,6 +23,7 @@ import java.util.stream.Collectors;
 final class FleetView extends BorderPane {
 
     private static final double SPACING = 12;
+    private static final double SIDE_COLUMN_WIDTH = 260;
     private static final String DEFAULT_SLOT = "slot1";
 
     private final GameService game;
@@ -32,6 +32,7 @@ final class FleetView extends BorderPane {
 
     private final ListView<Unit> unitList = new ListView<>();
     private final Label details = new Label("Seleziona un'unità");
+    private final StatsTable statsTable = new StatsTable();
     private final HBox unequipButtons = new HBox(SPACING / 2);
     private final ComboBox<Gear> gearBox = new ComboBox<>();
     private final Button equipButton = new Button("Equipaggia");
@@ -61,7 +62,7 @@ final class FleetView extends BorderPane {
         });
         unitList.getSelectionModel().selectedItemProperty().addListener((obs, old, unit) -> showUnit(unit));
         VBox pane = new VBox(SPACING, new Label("Unità"), unitList);
-        pane.setPrefWidth(260);
+        pane.setPrefWidth(SIDE_COLUMN_WIDTH);
         return pane;
     }
 
@@ -78,7 +79,8 @@ final class FleetView extends BorderPane {
             }
         });
         equipButton.setOnAction(event -> equipSelected());
-        VBox pane = new VBox(SPACING, details, unequipButtons, new HBox(SPACING, gearBox, equipButton));
+        VBox pane = new VBox(SPACING, details, statsTable, statsTable.multipliersLabel(), unequipButtons,
+                new HBox(SPACING, gearBox, equipButton));
         pane.setPadding(new Insets(0, SPACING, 0, SPACING));
         return pane;
     }
@@ -86,7 +88,7 @@ final class FleetView extends BorderPane {
     private VBox inventoryPane() {
         inventoryLabel.setWrapText(true);
         VBox pane = new VBox(SPACING, new Label("Inventario"), inventoryLabel);
-        pane.setPrefWidth(260);
+        pane.setPrefWidth(SIDE_COLUMN_WIDTH);
         return pane;
     }
 
@@ -118,16 +120,14 @@ final class FleetView extends BorderPane {
         equipButton.setDisable(unit == null || gearBox.getItems().isEmpty());
         if (unit == null) {
             details.setText("Seleziona un'unità");
+            statsTable.clear();
             return;
         }
-        Stats stats = unit.effectiveStats();
         details.setText(unit.name() + " — " + unit.crewLeader() + " (" + unit.trait().name() + ")"
                 + "\nLivello " + unit.level() + " · Esperienza " + unit.experience()
                 + "\nResistenza " + unit.endurance().current() + "/" + unit.endurance().max()
-                + " · Risorse " + unit.resources().current() + "/" + unit.resources().max()
-                + "\nTecnica " + stats.technique() + " · Medicina " + stats.medicine()
-                + " · Coordinamento " + stats.coordination()
-                + "\nSangue freddo " + stats.composure() + " · Prontezza " + stats.readiness());
+                + " · Risorse " + unit.resources().current() + "/" + unit.resources().max());
+        statsTable.show(unit.effectiveStats().plus(unit.trait().bonus().times(-1)), unit.trait());
         for (GearSlot slot : GearSlot.values()) {
             Button button = new Button(slot + ": " + unit.gearIn(slot).map(Item::name).orElse("—"));
             button.setDisable(unit.gearIn(slot).isEmpty());

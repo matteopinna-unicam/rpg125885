@@ -1,7 +1,6 @@
 package it.unicam.cs.mpgc.rpg125885.ui.javafx;
 
 import it.unicam.cs.mpgc.rpg125885.engine.dispatch.FleetBuilder;
-import it.unicam.cs.mpgc.rpg125885.model.fleet.Stats;
 import it.unicam.cs.mpgc.rpg125885.model.fleet.Trait;
 import it.unicam.cs.mpgc.rpg125885.model.fleet.Unit;
 import it.unicam.cs.mpgc.rpg125885.model.fleet.VehicleType;
@@ -20,6 +19,7 @@ import javafx.scene.layout.VBox;
 final class FleetBuilderView extends BorderPane {
 
     private static final double SPACING = 12;
+    private static final double COLUMN_WIDTH = 440;
     private static final String DEFAULT_LEADER = "Capo squadra";
 
     private final GameService game;
@@ -27,7 +27,8 @@ final class FleetBuilderView extends BorderPane {
     private final FleetBuilder builder;
 
     private final ListView<VehicleType> typeList = new ListView<>();
-    private final Label typeDetails = new Label("Seleziona un mezzo");
+    private final Label typeTitle = new Label("Seleziona un mezzo");
+    private final StatsTable statsTable = new StatsTable();
     private final TextField leaderField = new TextField();
     private final ComboBox<Trait> traitBox = new ComboBox<>();
     private final Button addButton = new Button("Aggiungi alla flotta");
@@ -59,7 +60,7 @@ final class FleetBuilderView extends BorderPane {
             }
         });
         typeList.getSelectionModel().selectedItemProperty().addListener((obs, old, type) -> {
-            typeDetails.setText(type == null ? "Seleziona un mezzo" : describe(type));
+            showStats();
             refresh();
         });
 
@@ -77,12 +78,13 @@ final class FleetBuilderView extends BorderPane {
                 return null;
             }
         });
+        traitBox.getSelectionModel().selectedItemProperty().addListener((obs, old, trait) -> showStats());
         traitBox.getSelectionModel().selectFirst();
         addButton.setOnAction(event -> addSelected());
 
-        VBox pane = new VBox(SPACING, new Label("Mezzi disponibili"), typeList, typeDetails,
-                leaderField, traitBox, addButton);
-        pane.setPrefWidth(440);
+        VBox pane = new VBox(SPACING, new Label("Mezzi disponibili"), typeList, typeTitle, statsTable,
+                statsTable.multipliersLabel(), leaderField, traitBox, addButton);
+        pane.setPrefWidth(COLUMN_WIDTH);
         return pane;
     }
 
@@ -101,7 +103,7 @@ final class FleetBuilderView extends BorderPane {
             refresh();
         });
         VBox pane = new VBox(SPACING, new Label("La tua flotta"), fleetList, removeButton);
-        pane.setPrefWidth(440);
+        pane.setPrefWidth(COLUMN_WIDTH);
         return pane;
     }
 
@@ -140,11 +142,16 @@ final class FleetBuilderView extends BorderPane {
         startButton.setDisable(!builder.isComplete());
     }
 
-    private static String describe(VehicleType type) {
-        Stats stats = type.baseStats();
-        return type.displayName() + "\nResistenza " + stats.maxEndurance() + " · Risorse " + stats.maxResources()
-                + "\nTecnica " + stats.technique() + " · Medicina " + stats.medicine()
-                + " · Coordinamento " + stats.coordination()
-                + "\nSangue freddo " + stats.composure() + " · Prontezza " + stats.readiness();
+    /** Statistiche del mezzo selezionato con l'effetto del tratto scelto. */
+    private void showStats() {
+        VehicleType type = typeList.getSelectionModel().getSelectedItem();
+        Trait trait = traitBox.getValue();
+        if (type == null || trait == null) {
+            typeTitle.setText("Seleziona un mezzo");
+            statsTable.clear();
+            return;
+        }
+        typeTitle.setText(type.displayName() + " — tratto: " + trait.name());
+        statsTable.show(type.baseStats(), trait);
     }
 }
