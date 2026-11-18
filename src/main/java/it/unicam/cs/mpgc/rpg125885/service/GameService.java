@@ -27,6 +27,7 @@ import it.unicam.cs.mpgc.rpg125885.model.shift.GameState;
 import it.unicam.cs.mpgc.rpg125885.model.shift.Phase;
 import it.unicam.cs.mpgc.rpg125885.model.shift.Scenario;
 import it.unicam.cs.mpgc.rpg125885.model.shift.ShiftOutcome;
+import it.unicam.cs.mpgc.rpg125885.model.shift.ShiftReport;
 import it.unicam.cs.mpgc.rpg125885.persistence.GameRepository;
 import it.unicam.cs.mpgc.rpg125885.persistence.PersistenceException;
 import it.unicam.cs.mpgc.rpg125885.persistence.SaveSlotInfo;
@@ -74,6 +75,15 @@ public final class GameService {
 
     public List<VehicleType> purchasableVehicleTypes() {
         return vehicleTypes.purchasable();
+    }
+
+    /**
+     * Nome leggibile di un tipo di mezzo, per mostrare i requisiti delle chiamate.
+     *
+     * @throws IllegalArgumentException se il tipo non è registrato
+     */
+    public String vehicleTypeName(String typeId) {
+        return vehicleTypes.byId(typeId).displayName();
     }
 
     public List<Trait> traits() {
@@ -149,6 +159,11 @@ public final class GameService {
 
     public ShiftOutcome outcome() {
         return currentDirector().outcome();
+    }
+
+    /** Rapporto dell'alba sulla notte giocata finora. */
+    public ShiftReport shiftReport() {
+        return ShiftReport.of(outcome(), crisisIndex().value(), callLog());
     }
 
     // --- Sala operativa ---
