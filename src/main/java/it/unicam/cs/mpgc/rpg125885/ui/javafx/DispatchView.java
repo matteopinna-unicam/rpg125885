@@ -25,6 +25,8 @@ import java.util.Optional;
 final class DispatchView extends BorderPane {
 
     private static final double SPACING = 12;
+    private static final double CRISIS_BAR_WIDTH = 300;
+    private static final double CALL_PANE_WIDTH = 380;
     private static final String PERCENT_FORMAT = "%.0f%%";
 
     private final GameService game;
@@ -54,7 +56,7 @@ final class DispatchView extends BorderPane {
     }
 
     private HBox buildHeader() {
-        crisisBar.setPrefWidth(300);
+        crisisBar.setPrefWidth(CRISIS_BAR_WIDTH);
         HBox header = new HBox(SPACING, timeLabel, new Label("Indice di Crisi"), crisisBar, crisisLabel);
         header.setPadding(new Insets(0, 0, SPACING, 0));
         return header;
@@ -70,7 +72,7 @@ final class DispatchView extends BorderPane {
         });
         callList.getSelectionModel().selectedItemProperty().addListener((obs, old, scenario) -> showCall(scenario));
         VBox pane = new VBox(SPACING, new Label("Chiamate in arrivo"), callList);
-        pane.setPrefWidth(380);
+        pane.setPrefWidth(CALL_PANE_WIDTH);
         return pane;
     }
 
