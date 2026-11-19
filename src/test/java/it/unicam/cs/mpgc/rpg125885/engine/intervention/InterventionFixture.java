@@ -47,7 +47,7 @@ public final class InterventionFixture {
     }
 
     public static Intervention intervention(List<Unit> units, List<Hazard> hazards, int rounds,
-                                            EffectCalculator calculator, RandomSource random) {
+                                     EffectCalculator calculator, RandomSource random) {
         return new Intervention(units, hazards, rounds, calculator, random, new ReadinessTurnOrder(), behaviors());
     }
 }
