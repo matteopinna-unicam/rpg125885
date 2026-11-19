@@ -27,6 +27,8 @@ dependencies {
 
 application {
     mainClass = 'it.unicam.cs.mpgc.rpg125885.app.Main'
+    // Da Java 24 JavaFX deve dichiarare l'accesso alle librerie native, altrimenti la JVM stampa un avviso
+    applicationDefaultJvmArgs = ['--enable-native-access=javafx.graphics']
 }
 
 test {
