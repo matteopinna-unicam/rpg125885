@@ -53,7 +53,8 @@ public final class Hazard extends Combatant {
         lastFacedRound = round;
     }
 
-    public boolean wasFacedIn(int round) {
-        return lastFacedRound == round;
+    /** Se è stato affrontato nel round indicato o in uno successivo. */
+    public boolean wasFacedSince(int round) {
+        return lastFacedRound >= round;
     }
 }

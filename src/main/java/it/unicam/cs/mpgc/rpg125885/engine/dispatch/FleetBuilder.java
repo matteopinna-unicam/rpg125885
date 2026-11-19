@@ -8,10 +8,10 @@ import it.unicam.cs.mpgc.rpg125885.model.item.Item;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 /** Compone la flotta di una nuova partita rispettando il budget e il numero minimo di unità. */
 public final class FleetBuilder {
@@ -22,8 +22,9 @@ public final class FleetBuilder {
     private final int budget;
     private final int minimumUnits;
     private final Map<Item, Integer> startingSupplies;
+    private static final int FIRST_NUMBER = 1;
+
     private final List<Unit> units = new ArrayList<>();
-    private final Map<String, Integer> countByTypeId = new HashMap<>();
     private int spent;
 
     /**
@@ -65,7 +66,7 @@ public final class FleetBuilder {
     }
 
     /**
-     * Aggiunge un'unità con un nominativo ricavato dal tipo ("Autoscala 2").
+     * Aggiunge un'unità con un nominativo ricavato dal tipo ("Autoscala 2"), col primo numero libero.
      *
      * @return l'unità creata
      * @throws IllegalArgumentException se il tipo non è acquistabile o il budget non basta
@@ -79,8 +80,7 @@ public final class FleetBuilder {
             throw new IllegalArgumentException("Budget insufficiente: servono " + type.cost()
                     + " punti, ne restano " + remainingBudget());
         }
-        int number = countByTypeId.merge(type.id(), 1, Integer::sum);
-        Unit unit = new Unit(type.displayName() + " " + number, crewLeader, type, trait);
+        Unit unit = new Unit(nextCallsign(type), crewLeader, type, trait);
         units.add(unit);
         spent += type.cost();
         return unit;
@@ -110,5 +110,17 @@ public final class FleetBuilder {
         Fleet fleet = new Fleet(units);
         startingSupplies.forEach((item, quantity) -> fleet.inventory().add(item, quantity));
         return fleet;
+    }
+
+    /**
+     * Il numero libero più basso per il tipo: i nominativi restano unici e, aggiungendo e togliendo unità,
+     * non crescono oltre quanto il budget permette (così non raggiungono quelli dei rinforzi).
+     */
+    private String nextCallsign(VehicleType type) {
+        return IntStream.iterate(FIRST_NUMBER, number -> number + 1)
+                .mapToObj(number -> type.displayName() + " " + number)
+                .filter(callsign -> units.stream().noneMatch(unit -> unit.name().equals(callsign)))
+                .findFirst()
+                .orElseThrow();
     }
 }
