@@ -101,7 +101,7 @@
         <requiresVehicle type="aerial_ladder"/>
         <outcome success="La famiglia è in salvo e viene accompagnata in un luogo riparato."
                  failure="Il recupero è rimandato a luce piena: la famiglia resta assistita sul tetto."/>
-        <reward unit="ambulance" callsign="Ambulanza 9" crewLeader="Chiara" trait="empathic"/>
+        <reward unit="ambulance" callsign="AMB 1" crewLeader="Chiara" trait="empathic"/>
     </scenario>
 
     <!-- 02:00: sosta in base -->

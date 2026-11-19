@@ -65,14 +65,27 @@ class FleetBuilderTest {
     }
 
     @Test
-    void callsignsStayUniqueAfterARemoval() {
+    void aRemovedCallsignIsReusedAndCallsignsStayUnique() {
         Unit first = builder.add(new PatrolCar(), "Verdi", NO_BONUS);
-        builder.add(new PatrolCar(), "Gialli", NO_BONUS);
+        Unit second = builder.add(new PatrolCar(), "Gialli", NO_BONUS);
         builder.remove(first);
 
         Unit third = builder.add(new PatrolCar(), "Blu", NO_BONUS);
 
-        assertEquals(new PatrolCar().displayName() + " 3", third.name());
+        assertEquals(new PatrolCar().displayName() + " 1", third.name());
+        assertEquals(new PatrolCar().displayName() + " 2", second.name());
+    }
+
+    @Test
+    void addingAndRemovingRepeatedlyDoesNotRaiseTheNumbers() {
+        // Prima il contatore cresceva sempre e poteva arrivare al nominativo di un rinforzo ("Ambulanza 9")
+        for (int attempt = 0; attempt < 10; attempt++) {
+            builder.remove(builder.add(new PatrolCar(), "Verdi", NO_BONUS));
+        }
+
+        Unit unit = builder.add(new PatrolCar(), "Verdi", NO_BONUS);
+
+        assertEquals(new PatrolCar().displayName() + " 1", unit.name());
     }
 
     @Test

@@ -7,6 +7,7 @@ import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionEvent;
 import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionEvent.InterventionEnded;
 import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionEvent.RoundStarted;
 import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionEvent.TurnStarted;
+import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionEvent.UnitExhausted;
 import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionListener;
 import it.unicam.cs.mpgc.rpg125885.model.fleet.Combatant;
 import it.unicam.cs.mpgc.rpg125885.model.fleet.Unit;
@@ -69,15 +70,22 @@ public final class Intervention {
         listeners.add(Objects.requireNonNull(listener, "listener"));
     }
 
-    /** Avvia il primo round e gioca i turni fino alla prima unità. Restituisce gli eventi prodotti. */
+    /**
+     * Avvia il primo round e gioca i turni fino alla prima unità. Restituisce gli eventi prodotti.
+     * Se tutte le unità arrivano già esauste, ad esempio per lo stress iniziale di una scelta narrativa,
+     * l'intervento fallisce subito, senza turni dei pericoli.
+     */
     public List<InterventionEvent> start() {
         if (started) {
             throw new IllegalStateException("L'intervento è già iniziato");
         }
         started = true;
         List<InterventionEvent> produced = new ArrayList<>();
+        units.stream().filter(unit -> !unit.isActive()).forEach(unit -> record(produced, new UnitExhausted(unit)));
         beginRound(produced);
-        advance(produced);
+        if (!checkEnd(produced)) {
+            advance(produced);
+        }
         return produced;
     }
 

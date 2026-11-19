@@ -61,6 +61,19 @@ class InterventionTest {
     }
 
     @Test
+    void failsAtStartWithoutHazardTurnsWhenEveryUnitArrivesExhausted() {
+        // Ad esempio per lo stress iniziale di una scelta narrativa: un pericolo steady non avrebbe bersagli
+        engine.endurance().decrease(engine.endurance().current());
+        Intervention intervention = intervention(List.of(engine), List.of(hazard(500, 5, "steady")), 3);
+
+        List<InterventionEvent> events = intervention.start();
+
+        assertEquals(List.of(new UnitExhausted(engine), new RoundStarted(1), new InterventionEnded(false)), events);
+        assertEquals(InterventionStatus.FAILED, intervention.status());
+        assertEquals(Optional.empty(), intervention.currentUnit());
+    }
+
+    @Test
     void unitsActBeforeHazardsOnEqualReadinessThenTheHazardActs() {
         Hazard hazard = hazard(500, 5, "steady");
         Intervention intervention = intervention(List.of(engine, ambulance), List.of(hazard), 3);
