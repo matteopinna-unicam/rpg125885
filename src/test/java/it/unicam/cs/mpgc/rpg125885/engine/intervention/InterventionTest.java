@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.rpg125885.engine.intervention;
 import it.unicam.cs.mpgc.rpg125885.engine.rules.ScriptedRandom;
 import it.unicam.cs.mpgc.rpg125885.engine.rules.StandardEffectCalculator;
 import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionEvent;
+import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionEvent.GravityEscalated;
 import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionEvent.HazardResolved;
 import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionEvent.InterventionEnded;
 import it.unicam.cs.mpgc.rpg125885.model.combat.InterventionEvent.RoundStarted;
@@ -48,6 +49,19 @@ class InterventionTest {
             Unit unit = intervention.currentUnit().orElseThrow();
             intervention.submit(new InterveneAction(unit, target));
         }
+    }
+
+    @Test
+    void slowEscalatingHazardFacedThisRoundStressesInsteadOfWorsening() {
+        // Pericolo con passo 5: agisce dopo l'ambulanza (Prontezza 7), che lo ha appena affrontato
+        Hazard hazard = hazard(500, 10, "escalating");
+        Intervention intervention = intervention(List.of(ambulance), List.of(hazard), 3);
+        intervention.start();
+
+        List<InterventionEvent> events = intervention.submit(new InterveneAction(ambulance, hazard));
+
+        assertTrue(events.stream().anyMatch(StressInflicted.class::isInstance));
+        assertTrue(events.stream().noneMatch(GravityEscalated.class::isInstance));
     }
 
     @Test
@@ -207,8 +221,8 @@ class InterventionTest {
         assertEquals(20 - 7, engine.resources().current());
         assertEquals(500 - 13, first.gravity().current());
         assertEquals(500 - 13, second.gravity().current());
-        assertTrue(first.wasFacedIn(1));
-        assertTrue(second.wasFacedIn(1));
+        assertTrue(first.wasFacedSince(1));
+        assertTrue(second.wasFacedSince(1));
     }
 
     @Test

@@ -64,12 +64,13 @@ class HazardTest {
     @Test
     void remembersLastFacedRound() {
         Hazard hazard = new Hazard(template);
-        assertFalse(hazard.wasFacedIn(0));
+        assertFalse(hazard.wasFacedSince(0));
 
         hazard.markFacedIn(2);
 
-        assertTrue(hazard.wasFacedIn(2));
-        assertFalse(hazard.wasFacedIn(3));
+        assertTrue(hazard.wasFacedSince(1));
+        assertTrue(hazard.wasFacedSince(2));
+        assertFalse(hazard.wasFacedSince(3));
     }
 
     @Test
