@@ -111,6 +111,15 @@ class ShiftDirectorTest {
     }
 
     @Test
+    void rejectsAMissingCall() {
+        ShiftDirector director = start(DispatchFixture.scenario("a", EASY_GRAVITY));
+
+        assertThrows(NullPointerException.class, () -> director.assign(null, List.of(engine)));
+        assertThrows(NullPointerException.class, () -> director.unassign(null));
+        assertTrue(director.assignments().isEmpty());
+    }
+
+    @Test
     void previewReportsMissingRequirementsWithoutAssigning() {
         Scenario call = DispatchFixture.scenario("a", EASY_GRAVITY, 3,
                 new Requirements(Map.of(Agency.POLICE, 1), Set.of()), Optional.empty(), Optional.empty());

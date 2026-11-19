@@ -54,6 +54,8 @@ final class DispatchView extends BorderPane {
         setBottom(buildFooter());
         refreshHeader();
         callList.getItems().setAll(game.calls());
+        // All'apertura nessuna chiamata è selezionata: i pulsanti partono disabilitati
+        showCall(null);
     }
 
     private HBox buildHeader() {
@@ -145,6 +147,9 @@ final class DispatchView extends BorderPane {
 
     private void assignSelected() {
         Scenario scenario = callList.getSelectionModel().getSelectedItem();
+        if (scenario == null) {
+            return;
+        }
         try {
             game.assign(scenario, chosenUnits());
         } catch (IllegalArgumentException | IllegalStateException e) {
@@ -155,6 +160,9 @@ final class DispatchView extends BorderPane {
 
     private void unassignSelected() {
         Scenario scenario = callList.getSelectionModel().getSelectedItem();
+        if (scenario == null) {
+            return;
+        }
         game.unassign(scenario);
         refreshCalls(scenario);
     }
