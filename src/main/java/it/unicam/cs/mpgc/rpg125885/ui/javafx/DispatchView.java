@@ -25,7 +25,10 @@ import java.util.Optional;
 final class DispatchView extends BorderPane {
 
     private static final double SPACING = 12;
+    private static final double CRISIS_BAR_WIDTH = 300;
+    private static final double CALL_PANE_WIDTH = 380;
     private static final String PERCENT_FORMAT = "%.0f%%";
+    private static final double PERCENT = 100.0;
 
     private final GameService game;
     private final SceneNavigator navigator;
@@ -51,10 +54,12 @@ final class DispatchView extends BorderPane {
         setBottom(buildFooter());
         refreshHeader();
         callList.getItems().setAll(game.calls());
+        // All'apertura nessuna chiamata è selezionata: i pulsanti partono disabilitati
+        showCall(null);
     }
 
     private HBox buildHeader() {
-        crisisBar.setPrefWidth(300);
+        crisisBar.setPrefWidth(CRISIS_BAR_WIDTH);
         HBox header = new HBox(SPACING, timeLabel, new Label("Indice di Crisi"), crisisBar, crisisLabel);
         header.setPadding(new Insets(0, 0, SPACING, 0));
         return header;
@@ -70,7 +75,7 @@ final class DispatchView extends BorderPane {
         });
         callList.getSelectionModel().selectedItemProperty().addListener((obs, old, scenario) -> showCall(scenario));
         VBox pane = new VBox(SPACING, new Label("Chiamate in arrivo"), callList);
-        pane.setPrefWidth(380);
+        pane.setPrefWidth(CALL_PANE_WIDTH);
         return pane;
     }
 
@@ -129,7 +134,7 @@ final class DispatchView extends BorderPane {
             previewLabel.setText(assessment.isSatisfied()
                     ? "Requisiti soddisfatti: efficacia piena."
                     : "Manca: " + String.join(", ", assessment.missing())
-                    + "\nEfficacia: " + String.format(PERCENT_FORMAT, assessment.efficiency() * 100));
+                    + "\nEfficacia: " + String.format(PERCENT_FORMAT, assessment.efficiency() * PERCENT));
         }
         updateButtons(scenario);
     }
@@ -142,6 +147,9 @@ final class DispatchView extends BorderPane {
 
     private void assignSelected() {
         Scenario scenario = callList.getSelectionModel().getSelectedItem();
+        if (scenario == null) {
+            return;
+        }
         try {
             game.assign(scenario, chosenUnits());
         } catch (IllegalArgumentException | IllegalStateException e) {
@@ -152,6 +160,9 @@ final class DispatchView extends BorderPane {
 
     private void unassignSelected() {
         Scenario scenario = callList.getSelectionModel().getSelectedItem();
+        if (scenario == null) {
+            return;
+        }
         game.unassign(scenario);
         refreshCalls(scenario);
     }
@@ -189,11 +200,14 @@ final class DispatchView extends BorderPane {
         return String.join(", ", scenario.hazards().stream().map(h -> h.name() + " (" + h.gravity() + ")").toList());
     }
 
-    private static String requirementsText(Scenario scenario) {
+    private String requirementsText(Scenario scenario) {
         List<String> parts = new ArrayList<>();
         scenario.requirements().minimumByAgency()
                 .forEach((agency, min) -> parts.add(agency.displayName() + " ≥ " + min));
-        parts.addAll(scenario.requirements().requiredVehicleTypes());
+        scenario.requirements().requiredVehicleTypes().stream()
+                .map(game::vehicleTypeName)
+                .sorted()
+                .forEach(parts::add);
         return parts.isEmpty() ? "nessuno" : String.join(", ", parts);
     }
 

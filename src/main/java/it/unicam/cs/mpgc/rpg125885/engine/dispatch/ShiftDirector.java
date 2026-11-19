@@ -108,6 +108,7 @@ public final class ShiftDirector {
      * @throws IllegalStateException    se gli interventi sono già iniziati o la notte è finita
      */
     public void assign(Scenario scenario, List<Unit> units) {
+        Objects.requireNonNull(scenario, "scenario");
         requireOngoing();
         if (playing) {
             throw new IllegalStateException("Gli interventi sono già iniziati");
@@ -131,6 +132,7 @@ public final class ShiftDirector {
 
     /** Toglie l'assegnazione di una chiamata; non fa nulla se non c'era. */
     public void unassign(Scenario scenario) {
+        Objects.requireNonNull(scenario, "scenario");
         if (playing) {
             throw new IllegalStateException("Gli interventi sono già iniziati");
         }
