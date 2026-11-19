@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.rpg125885.app;
 
 import it.unicam.cs.mpgc.rpg125885.content.ContentCatalog;
+import it.unicam.cs.mpgc.rpg125885.content.ManeuverCatalog;
 import it.unicam.cs.mpgc.rpg125885.content.VehicleTypeRegistry;
 import it.unicam.cs.mpgc.rpg125885.engine.behavior.BehaviorRegistry;
 import it.unicam.cs.mpgc.rpg125885.engine.behavior.EscalatingBehavior;
@@ -39,10 +40,13 @@ public final class AppContext {
     }
 
     /**
-     * @throws PersistenceException se il contenuto di gioco non si legge o non rispetta lo schema
+     * @throws PersistenceException     se il contenuto di gioco non si legge o non rispetta lo schema
+     * @throws IllegalArgumentException se due manovre dei mezzi registrati hanno lo stesso id
      */
     public static AppContext create() throws PersistenceException {
         VehicleTypeRegistry vehicleTypes = vehicleTypes();
+        // Il catalogo rifiuta gli id di manovra duplicati: costruirlo qui blocca l'avvio con un errore chiaro
+        new ManeuverCatalog(vehicleTypes);
         ContentCatalog content = new XmlContentCatalog(vehicleTypes);
         GameRepository repository = new XmlGameRepository(XmlGameRepository.defaultDirectory(), content, vehicleTypes);
         RandomSource random = new JavaRandomSource();
