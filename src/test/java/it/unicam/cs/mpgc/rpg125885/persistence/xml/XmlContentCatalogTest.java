@@ -49,7 +49,7 @@ class XmlContentCatalogTest {
 
         assertEquals(80, fire.gravity());
         assertEquals(5, fire.pace());
-        assertEquals(11, fire.stress());
+        assertEquals(19, fire.stress());
         assertEquals(9, fire.escalation());
         assertEquals("escalating", fire.behaviorId());
         assertEquals(26, fire.xp());
@@ -123,7 +123,7 @@ class XmlContentCatalogTest {
         assertEquals("Fuga chiusa, palazzo arieggiato: i residenti rientrano all'alba.", gas.successText());
 
         Decision decision = gas.decision().orElseThrow();
-        assertEquals(new DecisionOption("Entrare subito", 0, 0, 10), decision.first());
+        assertEquals(new DecisionOption("Entrare subito", 0, 0, 18), decision.first());
         assertEquals(new DecisionOption("Attendere la chiusura del contatore", -20, -1, 0), decision.second());
     }
 

@@ -8,7 +8,7 @@
         <hazard ref="gas_leak"/>
         <requires agency="FIRE_BRIGADE" min="1"/>
         <decision question="Il contatore generale è in cantina. Come procedete?">
-            <option text="Entrare subito" gravity="0" rounds="0" stress="10"/>
+            <option text="Entrare subito" gravity="0" rounds="0" stress="18"/>
             <option text="Attendere la chiusura del contatore" gravity="-20" rounds="-1" stress="0"/>
         </decision>
         <outcome success="Fuga chiusa, palazzo arieggiato: i residenti rientrano all'alba."
@@ -35,7 +35,7 @@
         <requires agency="FIRE_BRIGADE" min="1"/>
         <requiresVehicle type="aerial_ladder"/>
         <decision question="Il vano scale è pieno di fumo. Come salite?">
-            <option text="Salire dalle scale con gli autorespiratori" gravity="0" rounds="0" stress="8"/>
+            <option text="Salire dalle scale con gli autorespiratori" gravity="0" rounds="0" stress="14"/>
             <option text="Attendere l'Autoscala in posizione" gravity="10" rounds="-1" stress="0"/>
         </decision>
         <outcome success="Fiamme spente e appartamento messo in sicurezza: nessuno è rimasto coinvolto."
@@ -48,7 +48,7 @@
         <hazard ref="cardiac_arrest"/>
         <requires agency="EMS" min="1"/>
         <decision question="La porta d'ingresso è chiusa dall'interno. Come entrate?">
-            <option text="Forzare subito la porta" gravity="0" rounds="0" stress="6"/>
+            <option text="Forzare subito la porta" gravity="0" rounds="0" stress="11"/>
             <option text="Farsi aprire dal vicino con la chiave" gravity="15" rounds="1" stress="0"/>
         </decision>
         <outcome success="Il paziente è stabilizzato e viene trasportato in ospedale."
@@ -86,7 +86,7 @@
         <requires agency="POLICE" min="1"/>
         <requires agency="EMS" min="1"/>
         <decision question="I cancelli laterali sono chiusi. Che cosa fate?">
-            <option text="Aprire subito i cancelli laterali" gravity="-10" rounds="0" stress="8"/>
+            <option text="Aprire subito i cancelli laterali" gravity="-10" rounds="0" stress="14"/>
             <option text="Incanalare la folla verso l'uscita principale" gravity="-25" rounds="-1" stress="0"/>
         </decision>
         <outcome success="La folla si disperde in ordine e i contusi vengono assistiti sul posto."
@@ -117,7 +117,7 @@
         <requires agency="POLICE" min="1"/>
         <requires agency="FIRE_BRIGADE" min="1"/>
         <decision question="Le corsie sono bloccate e i feriti sono in più punti. Da dove iniziate?">
-            <option text="Soccorrere prima i feriti" gravity="-10" rounds="0" stress="8"/>
+            <option text="Soccorrere prima i feriti" gravity="-10" rounds="0" stress="14"/>
             <option text="Mettere in sicurezza la strada" gravity="-20" rounds="-1" stress="0"/>
         </decision>
         <outcome success="Tutti i feriti sono assistiti e la tangenziale viene riaperta."
@@ -153,7 +153,7 @@
         <requires agency="FIRE_BRIGADE" min="1"/>
         <requires agency="POLICE" min="1"/>
         <decision question="I curiosi sono vicini al tubo. Come procedete?">
-            <option text="Allontanare subito tutti" gravity="-10" rounds="0" stress="8"/>
+            <option text="Allontanare subito tutti" gravity="-10" rounds="0" stress="14"/>
             <option text="Prima chiudere la valvola, poi allontanare" gravity="-20" rounds="-1" stress="0"/>
         </decision>
         <outcome success="Valvola chiusa e area sgomberata: la scuola riaprirà regolarmente."
@@ -182,7 +182,7 @@
         <requires agency="POLICE" min="1"/>
         <requiresVehicle type="aerial_ladder"/>
         <decision question="L'acqua continua a salire. Quale intervento anticipate?">
-            <option text="Recuperare per prime le persone isolate" gravity="-10" rounds="0" stress="8"/>
+            <option text="Recuperare per prime le persone isolate" gravity="-10" rounds="0" stress="14"/>
             <option text="Sbarrare le strade e poi recuperare" gravity="-20" rounds="-1" stress="0"/>
         </decision>
         <outcome success="Tutte le persone sono state recuperate e il quartiere è assistito."
@@ -211,7 +211,7 @@
         <requires agency="EMS" min="1"/>
         <requires agency="POLICE" min="1"/>
         <decision question="La corrente non torna. Da dove cominciate?">
-            <option text="Ripristinare il generatore" gravity="-10" rounds="0" stress="8"/>
+            <option text="Ripristinare il generatore" gravity="-10" rounds="0" stress="14"/>
             <option text="Evacuare prima i reparti critici" gravity="-20" rounds="-1" stress="0"/>
         </decision>
         <outcome success="Corrente ripristinata e reparti al sicuro: l'ospedale riapre all'alba."
